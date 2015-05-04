@@ -25,6 +25,7 @@
 
 all:
 	make regenerate
+	make gofmt
 	make test
 
 regenerate:
@@ -33,6 +34,9 @@ regenerate:
 
 test:
 	go test -v ./...
+
+gofmt:
+	gofmt -l -s -w .
 
 drone:
 	sudo apt-get install protobuf-compiler

@@ -101,11 +101,11 @@ func (this *bServer) Bidi(b MyTest_BidiServer) error {
 func setup(t testing.TB, mytest MyTestServer) (*grpc.Server, MyTestClient) {
 	lis, err := net.Listen("tcp", "localhost:0")
 	if err != nil {
-		log.Fatalf("Failed to listen: %v", err)
+		t.Fatalf("Failed to listen: %v", err)
 	}
 	_, port, err := net.SplitHostPort(lis.Addr().String())
 	if err != nil {
-		log.Fatalf("Failed to parse listener address: %v", err)
+		t.Fatalf("Failed to parse listener address: %v", err)
 	}
 	s := grpc.NewServer(grpc.MaxConcurrentStreams(1))
 	RegisterMyTestServer(s, mytest)
@@ -113,7 +113,7 @@ func setup(t testing.TB, mytest MyTestServer) (*grpc.Server, MyTestClient) {
 	addr := "localhost:" + port
 	conn, err := grpc.Dial(addr)
 	if err != nil {
-		log.Fatalf("Dial(%q) = %v", addr, err)
+		t.Fatalf("Dial(%q) = %v", addr, err)
 	}
 	tc := NewMyTestClient(conn)
 	return s, tc

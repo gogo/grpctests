@@ -38,11 +38,12 @@ import (
 	"time"
 )
 
+var msg = test.NewPopulatedNinOptStruct(rand.New(rand.NewSource(time.Now().UnixNano())), true)
+
 type myBenchServer struct{}
 
 func (this *myBenchServer) Down(m *MyRequest, s MyBench_DownServer) error {
 	for {
-		msg := test.NewPopulatedNinOptStruct(rand.New(rand.NewSource(time.Now().UnixNano())), true)
 		if err := s.Send(msg); err != nil {
 			return err
 		}
@@ -171,8 +172,8 @@ func (this *benchDownServer) Send(m *test.NinOptStruct) error {
 	return nil
 }
 
-func BenchmarkDownTCP(b *testing.B) {
-	server, client := setupBenchTCP(b, &myBenchServer{})
+func BenchmarkDownGRPC(b *testing.B) {
+	server, client := setupBenchGRPC(b, &myBenchServer{})
 	defer server.Stop()
 	down, err := client.Down(context.Background(), &MyRequest{1})
 	if err != nil {
@@ -184,8 +185,8 @@ func BenchmarkDownTCP(b *testing.B) {
 	}
 }
 
-func BenchmarkDownGRPC(b *testing.B) {
-	server, client := setupBenchGRPC(b, &myBenchServer{})
+func BenchmarkDownTCP(b *testing.B) {
+	server, client := setupBenchTCP(b, &myBenchServer{})
 	defer server.Stop()
 	down, err := client.Down(context.Background(), &MyRequest{1})
 	if err != nil {
