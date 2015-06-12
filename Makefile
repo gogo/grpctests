@@ -29,8 +29,8 @@ all:
 	make test
 
 regenerate:
-	(cd simple && protoc-min-version --version="3.0.0" --gogo_out=. --proto_path=.:$(GOPATH)/src/:$(GOPATH)/src/github.com/gogo/protobuf/protobuf/ grpc.proto)
-	(cd bench && protoc-gen-combo --version="3.0.0" --proto_path=.:$(GOPATH)/src/:$(GOPATH)/src/github.com/gogo/protobuf/protobuf/ bench.proto)
+	(cd simple && protoc-min-version --version="3.0.0" --gogo_out=plugins=grpc:. --proto_path=.:$(GOPATH)/src/:$(GOPATH)/src/github.com/gogo/protobuf/protobuf/ grpc.proto)
+	(cd bench && protoc-gen-combo --version="3.0.0" --proto_path=.:$(GOPATH)/src/:$(GOPATH)/src/github.com/gogo/protobuf/protobuf/ --plugins=grpc bench.proto)
 
 test:
 	go test -v ./...

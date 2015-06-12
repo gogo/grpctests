@@ -178,6 +178,7 @@ func (m *Request) Unmarshal(data []byte) error {
 			index += skippy
 		}
 	}
+
 	return nil
 }
 func (m *Small) Unmarshal(data []byte) error {
@@ -265,6 +266,7 @@ func (m *Small) Unmarshal(data []byte) error {
 			index += skippy
 		}
 	}
+
 	return nil
 }
 func (m *Medium) Unmarshal(data []byte) error {
@@ -517,6 +519,7 @@ func (m *Medium) Unmarshal(data []byte) error {
 			index += skippy
 		}
 	}
+
 	return nil
 }
 func (m *Big) Unmarshal(data []byte) error {
@@ -604,7 +607,9 @@ func (m *Big) Unmarshal(data []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.Field4 = append(m.Field4, &Small{})
-			m.Field4[len(m.Field4)-1].Unmarshal(data[index:postIndex])
+			if err := m.Field4[len(m.Field4)-1].Unmarshal(data[index:postIndex]); err != nil {
+				return err
+			}
 			index = postIndex
 		case 6:
 			if wireType != 0 {
@@ -747,6 +752,7 @@ func (m *Big) Unmarshal(data []byte) error {
 			index += skippy
 		}
 	}
+
 	return nil
 }
 func (m *Request) Size() (n int) {
