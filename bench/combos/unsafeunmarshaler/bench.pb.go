@@ -17,12 +17,12 @@
 package bench
 
 import proto "github.com/gogo/protobuf/proto"
-
-// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto/gogo.pb"
-
-import io "io"
-import unsafe "unsafe"
 import fmt "fmt"
+import math "math"
+
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+
+import bytes "bytes"
 
 import strings "strings"
 import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
@@ -30,22 +30,21 @@ import sort "sort"
 import strconv "strconv"
 import reflect "reflect"
 
-import bytes "bytes"
-
 import (
 	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
+import io "io"
+import unsafe "unsafe"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
+var _ = math.Inf
 
 type Request struct {
-	Num int64 `protobuf:"varint,1,opt,proto3" json:"Num,omitempty"`
+	Num int64 `protobuf:"varint,1,opt,name=Num,proto3" json:"Num,omitempty"`
 }
 
 func (m *Request) Reset()         { *m = Request{} }
@@ -53,9 +52,9 @@ func (m *Request) String() string { return proto.CompactTextString(m) }
 func (*Request) ProtoMessage()    {}
 
 type Small struct {
-	Field3  int32  `protobuf:"varint,3,opt,proto3" json:"Field3,omitempty"`
-	Field11 uint64 `protobuf:"fixed64,11,opt,proto3" json:"Field11,omitempty"`
-	Field14 string `protobuf:"bytes,14,opt,proto3" json:"Field14,omitempty"`
+	Field3  int32  `protobuf:"varint,3,opt,name=Field3,proto3" json:"Field3,omitempty"`
+	Field11 uint64 `protobuf:"fixed64,11,opt,name=Field11,proto3" json:"Field11,omitempty"`
+	Field14 string `protobuf:"bytes,14,opt,name=Field14,proto3" json:"Field14,omitempty"`
 }
 
 func (m *Small) Reset()         { *m = Small{} }
@@ -63,21 +62,21 @@ func (m *Small) String() string { return proto.CompactTextString(m) }
 func (*Small) ProtoMessage()    {}
 
 type Medium struct {
-	Field1  float64 `protobuf:"fixed64,1,opt,proto3" json:"Field1,omitempty"`
-	Field2  float32 `protobuf:"fixed32,2,opt,proto3" json:"Field2,omitempty"`
-	Field3  int32   `protobuf:"varint,3,opt,proto3" json:"Field3,omitempty"`
-	Field4  int64   `protobuf:"varint,4,opt,proto3" json:"Field4,omitempty"`
-	Field5  uint32  `protobuf:"varint,5,opt,proto3" json:"Field5,omitempty"`
-	Field6  uint64  `protobuf:"varint,6,opt,proto3" json:"Field6,omitempty"`
-	Field7  int32   `protobuf:"zigzag32,7,opt,proto3" json:"Field7,omitempty"`
-	Field8  int64   `protobuf:"zigzag64,8,opt,proto3" json:"Field8,omitempty"`
-	Field9  uint32  `protobuf:"fixed32,9,opt,proto3" json:"Field9,omitempty"`
-	Field10 int32   `protobuf:"fixed32,10,opt,proto3" json:"Field10,omitempty"`
-	Field11 uint64  `protobuf:"fixed64,11,opt,proto3" json:"Field11,omitempty"`
-	Field12 int64   `protobuf:"fixed64,12,opt,proto3" json:"Field12,omitempty"`
-	Field13 bool    `protobuf:"varint,13,opt,proto3" json:"Field13,omitempty"`
-	Field14 string  `protobuf:"bytes,14,opt,proto3" json:"Field14,omitempty"`
-	Field15 []byte  `protobuf:"bytes,15,opt,proto3" json:"Field15,omitempty"`
+	Field1  float64 `protobuf:"fixed64,1,opt,name=Field1,proto3" json:"Field1,omitempty"`
+	Field2  float32 `protobuf:"fixed32,2,opt,name=Field2,proto3" json:"Field2,omitempty"`
+	Field3  int32   `protobuf:"varint,3,opt,name=Field3,proto3" json:"Field3,omitempty"`
+	Field4  int64   `protobuf:"varint,4,opt,name=Field4,proto3" json:"Field4,omitempty"`
+	Field5  uint32  `protobuf:"varint,5,opt,name=Field5,proto3" json:"Field5,omitempty"`
+	Field6  uint64  `protobuf:"varint,6,opt,name=Field6,proto3" json:"Field6,omitempty"`
+	Field7  int32   `protobuf:"zigzag32,7,opt,name=Field7,proto3" json:"Field7,omitempty"`
+	Field8  int64   `protobuf:"zigzag64,8,opt,name=Field8,proto3" json:"Field8,omitempty"`
+	Field9  uint32  `protobuf:"fixed32,9,opt,name=Field9,proto3" json:"Field9,omitempty"`
+	Field10 int32   `protobuf:"fixed32,10,opt,name=Field10,proto3" json:"Field10,omitempty"`
+	Field11 uint64  `protobuf:"fixed64,11,opt,name=Field11,proto3" json:"Field11,omitempty"`
+	Field12 int64   `protobuf:"fixed64,12,opt,name=Field12,proto3" json:"Field12,omitempty"`
+	Field13 bool    `protobuf:"varint,13,opt,name=Field13,proto3" json:"Field13,omitempty"`
+	Field14 string  `protobuf:"bytes,14,opt,name=Field14,proto3" json:"Field14,omitempty"`
+	Field15 []byte  `protobuf:"bytes,15,opt,name=Field15,proto3" json:"Field15,omitempty"`
 }
 
 func (m *Medium) Reset()         { *m = Medium{} }
@@ -85,16 +84,16 @@ func (m *Medium) String() string { return proto.CompactTextString(m) }
 func (*Medium) ProtoMessage()    {}
 
 type Big struct {
-	Field1  float64  `protobuf:"fixed64,1,opt,proto3" json:"Field1,omitempty"`
-	Field2  float32  `protobuf:"fixed32,2,opt,proto3" json:"Field2,omitempty"`
-	Field3  *Medium  `protobuf:"bytes,3,opt" json:"Field3,omitempty"`
-	Field4  []*Small `protobuf:"bytes,4,rep" json:"Field4,omitempty"`
-	Field6  uint64   `protobuf:"varint,6,opt,proto3" json:"Field6,omitempty"`
-	Field7  int32    `protobuf:"zigzag32,7,opt,proto3" json:"Field7,omitempty"`
-	Field8  *Medium  `protobuf:"bytes,8,opt" json:"Field8,omitempty"`
-	Field13 bool     `protobuf:"varint,13,opt,proto3" json:"Field13,omitempty"`
-	Field14 string   `protobuf:"bytes,14,opt,proto3" json:"Field14,omitempty"`
-	Field15 []byte   `protobuf:"bytes,15,opt,proto3" json:"Field15,omitempty"`
+	Field1  float64  `protobuf:"fixed64,1,opt,name=Field1,proto3" json:"Field1,omitempty"`
+	Field2  float32  `protobuf:"fixed32,2,opt,name=Field2,proto3" json:"Field2,omitempty"`
+	Field3  *Medium  `protobuf:"bytes,3,opt,name=Field3" json:"Field3,omitempty"`
+	Field4  []*Small `protobuf:"bytes,4,rep,name=Field4" json:"Field4,omitempty"`
+	Field6  uint64   `protobuf:"varint,6,opt,name=Field6,proto3" json:"Field6,omitempty"`
+	Field7  int32    `protobuf:"zigzag32,7,opt,name=Field7,proto3" json:"Field7,omitempty"`
+	Field8  *Medium  `protobuf:"bytes,8,opt,name=Field8" json:"Field8,omitempty"`
+	Field13 bool     `protobuf:"varint,13,opt,name=Field13,proto3" json:"Field13,omitempty"`
+	Field14 string   `protobuf:"bytes,14,opt,name=Field14,proto3" json:"Field14,omitempty"`
+	Field15 []byte   `protobuf:"bytes,15,opt,name=Field15,proto3" json:"Field15,omitempty"`
 }
 
 func (m *Big) Reset()         { *m = Big{} }
@@ -122,1119 +121,6 @@ func (m *Big) GetField8() *Medium {
 	return nil
 }
 
-func init() {
-}
-func (m *Request) Unmarshal(data []byte) error {
-	l := len(data)
-	index := 0
-	for index < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if index >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := data[index]
-			index++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Num", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Num |= (int64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			index -= sizeOfWire
-			skippy, err := skipBenchUnsafe(data[index:])
-			if err != nil {
-				return err
-			}
-			if (index + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			index += skippy
-		}
-	}
-
-	return nil
-}
-func (m *Small) Unmarshal(data []byte) error {
-	l := len(data)
-	index := 0
-	for index < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if index >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := data[index]
-			index++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		switch fieldNum {
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field3", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Field3 |= (int32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 11:
-			if wireType != 1 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field11", wireType)
-			}
-			if index+8 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field11 = *(*uint64)(unsafe.Pointer(&data[index]))
-			index += 8
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field14", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + int(stringLen)
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field14 = string(data[index:postIndex])
-			index = postIndex
-		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			index -= sizeOfWire
-			skippy, err := skipBenchUnsafe(data[index:])
-			if err != nil {
-				return err
-			}
-			if (index + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			index += skippy
-		}
-	}
-
-	return nil
-}
-func (m *Medium) Unmarshal(data []byte) error {
-	l := len(data)
-	index := 0
-	for index < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if index >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := data[index]
-			index++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		switch fieldNum {
-		case 1:
-			if wireType != 1 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field1", wireType)
-			}
-			if index+8 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field1 = *(*float64)(unsafe.Pointer(&data[index]))
-			index += 8
-		case 2:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field2", wireType)
-			}
-			if index+4 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field2 = *(*float32)(unsafe.Pointer(&data[index]))
-			index += 4
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field3", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Field3 |= (int32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field4", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Field4 |= (int64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field5", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Field5 |= (uint32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field6", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Field6 |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field7", wireType)
-			}
-			var v int32
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				v |= (int32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			v = int32((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))
-			m.Field7 = v
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field8", wireType)
-			}
-			var v uint64
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				v |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
-			m.Field8 = int64(v)
-		case 9:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field9", wireType)
-			}
-			if index+4 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field9 = *(*uint32)(unsafe.Pointer(&data[index]))
-			index += 4
-		case 10:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field10", wireType)
-			}
-			if index+4 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field10 = *(*int32)(unsafe.Pointer(&data[index]))
-			index += 4
-		case 11:
-			if wireType != 1 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field11", wireType)
-			}
-			if index+8 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field11 = *(*uint64)(unsafe.Pointer(&data[index]))
-			index += 8
-		case 12:
-			if wireType != 1 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field12", wireType)
-			}
-			if index+8 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field12 = *(*int64)(unsafe.Pointer(&data[index]))
-			index += 8
-		case 13:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field13", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				v |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Field13 = bool(v != 0)
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field14", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + int(stringLen)
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field14 = string(data[index:postIndex])
-			index = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field15", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				byteLen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + byteLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field15 = append([]byte{}, data[index:postIndex]...)
-			index = postIndex
-		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			index -= sizeOfWire
-			skippy, err := skipBenchUnsafe(data[index:])
-			if err != nil {
-				return err
-			}
-			if (index + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			index += skippy
-		}
-	}
-
-	return nil
-}
-func (m *Big) Unmarshal(data []byte) error {
-	l := len(data)
-	index := 0
-	for index < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if index >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := data[index]
-			index++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		switch fieldNum {
-		case 1:
-			if wireType != 1 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field1", wireType)
-			}
-			if index+8 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field1 = *(*float64)(unsafe.Pointer(&data[index]))
-			index += 8
-		case 2:
-			if wireType != 5 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field2", wireType)
-			}
-			if index+4 > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field2 = *(*float32)(unsafe.Pointer(&data[index]))
-			index += 4
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field3", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Field3 == nil {
-				m.Field3 = &Medium{}
-			}
-			if err := m.Field3.Unmarshal(data[index:postIndex]); err != nil {
-				return err
-			}
-			index = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field4", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field4 = append(m.Field4, &Small{})
-			if err := m.Field4[len(m.Field4)-1].Unmarshal(data[index:postIndex]); err != nil {
-				return err
-			}
-			index = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field6", wireType)
-			}
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				m.Field6 |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field7", wireType)
-			}
-			var v int32
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				v |= (int32(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			v = int32((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))
-			m.Field7 = v
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field8", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Field8 == nil {
-				m.Field8 = &Medium{}
-			}
-			if err := m.Field8.Unmarshal(data[index:postIndex]); err != nil {
-				return err
-			}
-			index = postIndex
-		case 13:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field13", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				v |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Field13 = bool(v != 0)
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field14", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				stringLen |= (uint64(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + int(stringLen)
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field14 = string(data[index:postIndex])
-			index = postIndex
-		case 15:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Field15", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				byteLen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			postIndex := index + byteLen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Field15 = append([]byte{}, data[index:postIndex]...)
-			index = postIndex
-		default:
-			var sizeOfWire int
-			for {
-				sizeOfWire++
-				wire >>= 7
-				if wire == 0 {
-					break
-				}
-			}
-			index -= sizeOfWire
-			skippy, err := skipBenchUnsafe(data[index:])
-			if err != nil {
-				return err
-			}
-			if (index + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			index += skippy
-		}
-	}
-
-	return nil
-}
-func skipBenchUnsafe(data []byte) (n int, err error) {
-	l := len(data)
-	index := 0
-	for index < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if index >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := data[index]
-			index++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for {
-				if index >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				index++
-				if data[index-1] < 0x80 {
-					break
-				}
-			}
-			return index, nil
-		case 1:
-			index += 8
-			return index, nil
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if index >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := data[index]
-				index++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			index += length
-			return index, nil
-		case 3:
-			for {
-				var wire uint64
-				var start int = index
-				for shift := uint(0); ; shift += 7 {
-					if index >= l {
-						return 0, io.ErrUnexpectedEOF
-					}
-					b := data[index]
-					index++
-					wire |= (uint64(b) & 0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				wireType := int(wire & 0x7)
-				if wireType == 4 {
-					break
-				}
-				next, err := skipBenchUnsafe(data[start:])
-				if err != nil {
-					return 0, err
-				}
-				index = start + next
-			}
-			return index, nil
-		case 4:
-			return index, nil
-		case 5:
-			index += 4
-			return index, nil
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-	}
-	panic("unreachable")
-}
-func (m *Request) Size() (n int) {
-	var l int
-	_ = l
-	if m.Num != 0 {
-		n += 1 + sovBench(uint64(m.Num))
-	}
-	return n
-}
-
-func (m *Small) Size() (n int) {
-	var l int
-	_ = l
-	if m.Field3 != 0 {
-		n += 1 + sovBench(uint64(m.Field3))
-	}
-	if m.Field11 != 0 {
-		n += 9
-	}
-	l = len(m.Field14)
-	if l > 0 {
-		n += 1 + l + sovBench(uint64(l))
-	}
-	return n
-}
-
-func (m *Medium) Size() (n int) {
-	var l int
-	_ = l
-	if m.Field1 != 0 {
-		n += 9
-	}
-	if m.Field2 != 0 {
-		n += 5
-	}
-	if m.Field3 != 0 {
-		n += 1 + sovBench(uint64(m.Field3))
-	}
-	if m.Field4 != 0 {
-		n += 1 + sovBench(uint64(m.Field4))
-	}
-	if m.Field5 != 0 {
-		n += 1 + sovBench(uint64(m.Field5))
-	}
-	if m.Field6 != 0 {
-		n += 1 + sovBench(uint64(m.Field6))
-	}
-	if m.Field7 != 0 {
-		n += 1 + sozBench(uint64(m.Field7))
-	}
-	if m.Field8 != 0 {
-		n += 1 + sozBench(uint64(m.Field8))
-	}
-	if m.Field9 != 0 {
-		n += 5
-	}
-	if m.Field10 != 0 {
-		n += 5
-	}
-	if m.Field11 != 0 {
-		n += 9
-	}
-	if m.Field12 != 0 {
-		n += 9
-	}
-	if m.Field13 {
-		n += 2
-	}
-	l = len(m.Field14)
-	if l > 0 {
-		n += 1 + l + sovBench(uint64(l))
-	}
-	if m.Field15 != nil {
-		l = len(m.Field15)
-		if l > 0 {
-			n += 1 + l + sovBench(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *Big) Size() (n int) {
-	var l int
-	_ = l
-	if m.Field1 != 0 {
-		n += 9
-	}
-	if m.Field2 != 0 {
-		n += 5
-	}
-	l = m.Field3.Size()
-	n += 1 + l + sovBench(uint64(l))
-	if len(m.Field4) > 0 {
-		for _, e := range m.Field4 {
-			l = e.Size()
-			n += 1 + l + sovBench(uint64(l))
-		}
-	}
-	if m.Field6 != 0 {
-		n += 1 + sovBench(uint64(m.Field6))
-	}
-	if m.Field7 != 0 {
-		n += 1 + sozBench(uint64(m.Field7))
-	}
-	l = m.Field8.Size()
-	n += 1 + l + sovBench(uint64(l))
-	if m.Field13 {
-		n += 2
-	}
-	l = len(m.Field14)
-	if l > 0 {
-		n += 1 + l + sovBench(uint64(l))
-	}
-	if m.Field15 != nil {
-		l = len(m.Field15)
-		if l > 0 {
-			n += 1 + l + sovBench(uint64(l))
-		}
-	}
-	return n
-}
-
-func sovBench(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
-}
-func sozBench(x uint64) (n int) {
-	return sovBench(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func NewPopulatedRequest(r randyBench, easy bool) *Request {
-	this := &Request{}
-	this.Num = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Num *= -1
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSmall(r randyBench, easy bool) *Small {
-	this := &Small{}
-	this.Field3 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field3 *= -1
-	}
-	this.Field11 = uint64(r.Uint32())
-	this.Field14 = randStringBench(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMedium(r randyBench, easy bool) *Medium {
-	this := &Medium{}
-	this.Field1 = r.Float64()
-	if r.Intn(2) == 0 {
-		this.Field1 *= -1
-	}
-	this.Field2 = r.Float32()
-	if r.Intn(2) == 0 {
-		this.Field2 *= -1
-	}
-	this.Field3 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field3 *= -1
-	}
-	this.Field4 = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Field4 *= -1
-	}
-	this.Field5 = r.Uint32()
-	this.Field6 = uint64(r.Uint32())
-	this.Field7 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field7 *= -1
-	}
-	this.Field8 = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Field8 *= -1
-	}
-	this.Field9 = r.Uint32()
-	this.Field10 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field10 *= -1
-	}
-	this.Field11 = uint64(r.Uint32())
-	this.Field12 = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Field12 *= -1
-	}
-	this.Field13 = bool(r.Intn(2) == 0)
-	this.Field14 = randStringBench(r)
-	v1 := r.Intn(100)
-	this.Field15 = make([]byte, v1)
-	for i := 0; i < v1; i++ {
-		this.Field15[i] = byte(r.Intn(256))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedBig(r randyBench, easy bool) *Big {
-	this := &Big{}
-	this.Field1 = r.Float64()
-	if r.Intn(2) == 0 {
-		this.Field1 *= -1
-	}
-	this.Field2 = r.Float32()
-	if r.Intn(2) == 0 {
-		this.Field2 *= -1
-	}
-	this.Field3 = NewPopulatedMedium(r, easy)
-	v2 := r.Intn(10)
-	this.Field4 = make([]*Small, v2)
-	for i := 0; i < v2; i++ {
-		this.Field4[i] = NewPopulatedSmall(r, easy)
-	}
-	this.Field6 = uint64(r.Uint32())
-	this.Field7 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field7 *= -1
-	}
-	this.Field8 = NewPopulatedMedium(r, easy)
-	this.Field13 = bool(r.Intn(2) == 0)
-	this.Field14 = randStringBench(r)
-	v3 := r.Intn(100)
-	this.Field15 = make([]byte, v3)
-	for i := 0; i < v3; i++ {
-		this.Field15[i] = byte(r.Intn(256))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyBench interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneBench(r randyBench) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringBench(r randyBench) string {
-	v4 := r.Intn(100)
-	tmps := make([]rune, v4)
-	for i := 0; i < v4; i++ {
-		tmps[i] = randUTF8RuneBench(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedBench(r randyBench, maxFieldNumber int) (data []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		data = randFieldBench(data, r, fieldNumber, wire)
-	}
-	return data
-}
-func randFieldBench(data []byte, r randyBench, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		v5 := r.Int63()
-		if r.Intn(2) == 0 {
-			v5 *= -1
-		}
-		data = encodeVarintPopulateBench(data, uint64(v5))
-	case 1:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		ll := r.Intn(100)
-		data = encodeVarintPopulateBench(data, uint64(ll))
-		for j := 0; j < ll; j++ {
-			data = append(data, byte(r.Intn(256)))
-		}
-	default:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return data
-}
-func encodeVarintPopulateBench(data []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		data = append(data, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	data = append(data, uint8(v))
-	return data
-}
-func (this *Request) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Request{` +
-		`Num:` + fmt.Sprintf("%#v", this.Num) + `}`}, ", ")
-	return s
-}
-func (this *Small) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Small{` +
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14) + `}`}, ", ")
-	return s
-}
-func (this *Medium) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Medium{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15) + `}`}, ", ")
-	return s
-}
-func (this *Big) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Big{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15) + `}`}, ", ")
-	return s
-}
-func valueToGoStringBench(v interface{}, typ string) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
-}
-func extensionToGoStringBench(e map[int32]github_com_gogo_protobuf_proto.Extension) string {
-	if e == nil {
-		return "nil"
-	}
-	s := "map[int32]proto.Extension{"
-	keys := make([]int, 0, len(e))
-	for k := range e {
-		keys = append(keys, int(k))
-	}
-	sort.Ints(keys)
-	ss := []string{}
-	for _, k := range keys {
-		ss = append(ss, strconv.Itoa(k)+": "+e[int32(k)].GoString())
-	}
-	s += strings.Join(ss, ",") + "}"
-	return s
-}
 func (this *Request) VerboseEqual(that interface{}) error {
 	if that == nil {
 		if this == nil {
@@ -1595,6 +481,106 @@ func (this *Big) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *Request) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&bench.Request{")
+	s = append(s, "Num: "+fmt.Sprintf("%#v", this.Num)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Small) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&bench.Small{")
+	s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Medium) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 19)
+	s = append(s, "&bench.Medium{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Big) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 14)
+	s = append(s, "&bench.Big{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func valueToGoStringBench(v interface{}, typ string) string {
+	rv := reflect.ValueOf(v)
+	if rv.IsNil() {
+		return "nil"
+	}
+	pv := reflect.Indirect(rv).Interface()
+	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+}
+func extensionToGoStringBench(e map[int32]github_com_gogo_protobuf_proto.Extension) string {
+	if e == nil {
+		return "nil"
+	}
+	s := "map[int32]proto.Extension{"
+	keys := make([]int, 0, len(e))
+	for k := range e {
+		keys = append(keys, int(k))
+	}
+	sort.Ints(keys)
+	ss := []string{}
+	for _, k := range keys {
+		ss = append(ss, strconv.Itoa(k)+": "+e[int32(k)].GoString())
+	}
+	s += strings.Join(ss, ",") + "}"
+	return s
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
 
 // Client API for Bencher service
 
@@ -1805,3 +791,1189 @@ var _Bencher_serviceDesc = grpc.ServiceDesc{
 		},
 	},
 }
+
+func NewPopulatedRequest(r randyBench, easy bool) *Request {
+	this := &Request{}
+	this.Num = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Num *= -1
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedSmall(r randyBench, easy bool) *Small {
+	this := &Small{}
+	this.Field3 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field3 *= -1
+	}
+	this.Field11 = uint64(uint64(r.Uint32()))
+	this.Field14 = randStringBench(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedMedium(r randyBench, easy bool) *Medium {
+	this := &Medium{}
+	this.Field1 = float64(r.Float64())
+	if r.Intn(2) == 0 {
+		this.Field1 *= -1
+	}
+	this.Field2 = float32(r.Float32())
+	if r.Intn(2) == 0 {
+		this.Field2 *= -1
+	}
+	this.Field3 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field3 *= -1
+	}
+	this.Field4 = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Field4 *= -1
+	}
+	this.Field5 = uint32(r.Uint32())
+	this.Field6 = uint64(uint64(r.Uint32()))
+	this.Field7 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field7 *= -1
+	}
+	this.Field8 = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Field8 *= -1
+	}
+	this.Field9 = uint32(r.Uint32())
+	this.Field10 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field10 *= -1
+	}
+	this.Field11 = uint64(uint64(r.Uint32()))
+	this.Field12 = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Field12 *= -1
+	}
+	this.Field13 = bool(bool(r.Intn(2) == 0))
+	this.Field14 = randStringBench(r)
+	v1 := r.Intn(100)
+	this.Field15 = make([]byte, v1)
+	for i := 0; i < v1; i++ {
+		this.Field15[i] = byte(r.Intn(256))
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedBig(r randyBench, easy bool) *Big {
+	this := &Big{}
+	this.Field1 = float64(r.Float64())
+	if r.Intn(2) == 0 {
+		this.Field1 *= -1
+	}
+	this.Field2 = float32(r.Float32())
+	if r.Intn(2) == 0 {
+		this.Field2 *= -1
+	}
+	if r.Intn(10) != 0 {
+		this.Field3 = NewPopulatedMedium(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v2 := r.Intn(10)
+		this.Field4 = make([]*Small, v2)
+		for i := 0; i < v2; i++ {
+			this.Field4[i] = NewPopulatedSmall(r, easy)
+		}
+	}
+	this.Field6 = uint64(uint64(r.Uint32()))
+	this.Field7 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field7 *= -1
+	}
+	if r.Intn(10) != 0 {
+		this.Field8 = NewPopulatedMedium(r, easy)
+	}
+	this.Field13 = bool(bool(r.Intn(2) == 0))
+	this.Field14 = randStringBench(r)
+	v3 := r.Intn(100)
+	this.Field15 = make([]byte, v3)
+	for i := 0; i < v3; i++ {
+		this.Field15[i] = byte(r.Intn(256))
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+type randyBench interface {
+	Float32() float32
+	Float64() float64
+	Int63() int64
+	Int31() int32
+	Uint32() uint32
+	Intn(n int) int
+}
+
+func randUTF8RuneBench(r randyBench) rune {
+	ru := r.Intn(62)
+	if ru < 10 {
+		return rune(ru + 48)
+	} else if ru < 36 {
+		return rune(ru + 55)
+	}
+	return rune(ru + 61)
+}
+func randStringBench(r randyBench) string {
+	v4 := r.Intn(100)
+	tmps := make([]rune, v4)
+	for i := 0; i < v4; i++ {
+		tmps[i] = randUTF8RuneBench(r)
+	}
+	return string(tmps)
+}
+func randUnrecognizedBench(r randyBench, maxFieldNumber int) (data []byte) {
+	l := r.Intn(5)
+	for i := 0; i < l; i++ {
+		wire := r.Intn(4)
+		if wire == 3 {
+			wire = 5
+		}
+		fieldNumber := maxFieldNumber + r.Intn(100)
+		data = randFieldBench(data, r, fieldNumber, wire)
+	}
+	return data
+}
+func randFieldBench(data []byte, r randyBench, fieldNumber int, wire int) []byte {
+	key := uint32(fieldNumber)<<3 | uint32(wire)
+	switch wire {
+	case 0:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		v5 := r.Int63()
+		if r.Intn(2) == 0 {
+			v5 *= -1
+		}
+		data = encodeVarintPopulateBench(data, uint64(v5))
+	case 1:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
+	case 2:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		ll := r.Intn(100)
+		data = encodeVarintPopulateBench(data, uint64(ll))
+		for j := 0; j < ll; j++ {
+			data = append(data, byte(r.Intn(256)))
+		}
+	default:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
+	}
+	return data
+}
+func encodeVarintPopulateBench(data []byte, v uint64) []byte {
+	for v >= 1<<7 {
+		data = append(data, uint8(uint64(v)&0x7f|0x80))
+		v >>= 7
+	}
+	data = append(data, uint8(v))
+	return data
+}
+func (m *Request) Size() (n int) {
+	var l int
+	_ = l
+	if m.Num != 0 {
+		n += 1 + sovBench(uint64(m.Num))
+	}
+	return n
+}
+
+func (m *Small) Size() (n int) {
+	var l int
+	_ = l
+	if m.Field3 != 0 {
+		n += 1 + sovBench(uint64(m.Field3))
+	}
+	if m.Field11 != 0 {
+		n += 9
+	}
+	l = len(m.Field14)
+	if l > 0 {
+		n += 1 + l + sovBench(uint64(l))
+	}
+	return n
+}
+
+func (m *Medium) Size() (n int) {
+	var l int
+	_ = l
+	if m.Field1 != 0 {
+		n += 9
+	}
+	if m.Field2 != 0 {
+		n += 5
+	}
+	if m.Field3 != 0 {
+		n += 1 + sovBench(uint64(m.Field3))
+	}
+	if m.Field4 != 0 {
+		n += 1 + sovBench(uint64(m.Field4))
+	}
+	if m.Field5 != 0 {
+		n += 1 + sovBench(uint64(m.Field5))
+	}
+	if m.Field6 != 0 {
+		n += 1 + sovBench(uint64(m.Field6))
+	}
+	if m.Field7 != 0 {
+		n += 1 + sozBench(uint64(m.Field7))
+	}
+	if m.Field8 != 0 {
+		n += 1 + sozBench(uint64(m.Field8))
+	}
+	if m.Field9 != 0 {
+		n += 5
+	}
+	if m.Field10 != 0 {
+		n += 5
+	}
+	if m.Field11 != 0 {
+		n += 9
+	}
+	if m.Field12 != 0 {
+		n += 9
+	}
+	if m.Field13 {
+		n += 2
+	}
+	l = len(m.Field14)
+	if l > 0 {
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if m.Field15 != nil {
+		l = len(m.Field15)
+		if l > 0 {
+			n += 1 + l + sovBench(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *Big) Size() (n int) {
+	var l int
+	_ = l
+	if m.Field1 != 0 {
+		n += 9
+	}
+	if m.Field2 != 0 {
+		n += 5
+	}
+	if m.Field3 != nil {
+		l = m.Field3.Size()
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if len(m.Field4) > 0 {
+		for _, e := range m.Field4 {
+			l = e.Size()
+			n += 1 + l + sovBench(uint64(l))
+		}
+	}
+	if m.Field6 != 0 {
+		n += 1 + sovBench(uint64(m.Field6))
+	}
+	if m.Field7 != 0 {
+		n += 1 + sozBench(uint64(m.Field7))
+	}
+	if m.Field8 != nil {
+		l = m.Field8.Size()
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if m.Field13 {
+		n += 2
+	}
+	l = len(m.Field14)
+	if l > 0 {
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if m.Field15 != nil {
+		l = len(m.Field15)
+		if l > 0 {
+			n += 1 + l + sovBench(uint64(l))
+		}
+	}
+	return n
+}
+
+func sovBench(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozBench(x uint64) (n int) {
+	return sovBench(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *Request) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBenchUnsafe
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Request: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Request: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Num", wireType)
+			}
+			m.Num = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Num |= (int64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBenchUnsafe(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Small) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBenchUnsafe
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Small: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Small: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field3", wireType)
+			}
+			m.Field3 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Field3 |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 11:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field11", wireType)
+			}
+			if iNdEx+8 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field11 = *(*uint64)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 8
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field14", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field14 = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBenchUnsafe(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Medium) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBenchUnsafe
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Medium: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Medium: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field1", wireType)
+			}
+			if iNdEx+8 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field1 = *(*float64)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 8
+		case 2:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field2", wireType)
+			}
+			if iNdEx+4 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field2 = *(*float32)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 4
+		case 3:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field3", wireType)
+			}
+			m.Field3 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Field3 |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field4", wireType)
+			}
+			m.Field4 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Field4 |= (int64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field5", wireType)
+			}
+			m.Field5 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Field5 |= (uint32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field6", wireType)
+			}
+			m.Field6 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Field6 |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field7", wireType)
+			}
+			var v int32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = int32((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))
+			m.Field7 = v
+		case 8:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field8", wireType)
+			}
+			var v uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = (v >> 1) ^ uint64((int64(v&1)<<63)>>63)
+			m.Field8 = int64(v)
+		case 9:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field9", wireType)
+			}
+			if iNdEx+4 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field9 = *(*uint32)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 4
+		case 10:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field10", wireType)
+			}
+			if iNdEx+4 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field10 = *(*int32)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 4
+		case 11:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field11", wireType)
+			}
+			if iNdEx+8 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field11 = *(*uint64)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 8
+		case 12:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field12", wireType)
+			}
+			if iNdEx+8 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field12 = *(*int64)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 8
+		case 13:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field13", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Field13 = bool(v != 0)
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field14", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field14 = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field15", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field15 = append([]byte{}, data[iNdEx:postIndex]...)
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBenchUnsafe(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *Big) Unmarshal(data []byte) error {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowBenchUnsafe
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: Big: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: Big: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 1 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field1", wireType)
+			}
+			if iNdEx+8 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field1 = *(*float64)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 8
+		case 2:
+			if wireType != 5 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field2", wireType)
+			}
+			if iNdEx+4 > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field2 = *(*float32)(unsafe.Pointer(&data[iNdEx]))
+			iNdEx += 4
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field3", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Field3 == nil {
+				m.Field3 = &Medium{}
+			}
+			if err := m.Field3.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 4:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field4", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field4 = append(m.Field4, &Small{})
+			if err := m.Field4[len(m.Field4)-1].Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 6:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field6", wireType)
+			}
+			m.Field6 = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				m.Field6 |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+		case 7:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field7", wireType)
+			}
+			var v int32
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int32(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			v = int32((uint32(v) >> 1) ^ uint32(((v&1)<<31)>>31))
+			m.Field7 = v
+		case 8:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field8", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Field8 == nil {
+				m.Field8 = &Medium{}
+			}
+			if err := m.Field8.Unmarshal(data[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 13:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field13", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				v |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Field13 = bool(v != 0)
+		case 14:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field14", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field14 = string(data[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 15:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Field15", wireType)
+			}
+			var byteLen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				byteLen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if byteLen < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			postIndex := iNdEx + byteLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Field15 = append([]byte{}, data[iNdEx:postIndex]...)
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipBenchUnsafe(data[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthBenchUnsafe
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func skipBenchUnsafe(data []byte) (n int, err error) {
+	l := len(data)
+	iNdEx := 0
+	for iNdEx < l {
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return 0, ErrIntOverflowBenchUnsafe
+			}
+			if iNdEx >= l {
+				return 0, io.ErrUnexpectedEOF
+			}
+			b := data[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		wireType := int(wire & 0x7)
+		switch wireType {
+		case 0:
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				iNdEx++
+				if data[iNdEx-1] < 0x80 {
+					break
+				}
+			}
+			return iNdEx, nil
+		case 1:
+			iNdEx += 8
+			return iNdEx, nil
+		case 2:
+			var length int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return 0, ErrIntOverflowBenchUnsafe
+				}
+				if iNdEx >= l {
+					return 0, io.ErrUnexpectedEOF
+				}
+				b := data[iNdEx]
+				iNdEx++
+				length |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			iNdEx += length
+			if length < 0 {
+				return 0, ErrInvalidLengthBenchUnsafe
+			}
+			return iNdEx, nil
+		case 3:
+			for {
+				var innerWire uint64
+				var start int = iNdEx
+				for shift := uint(0); ; shift += 7 {
+					if shift >= 64 {
+						return 0, ErrIntOverflowBenchUnsafe
+					}
+					if iNdEx >= l {
+						return 0, io.ErrUnexpectedEOF
+					}
+					b := data[iNdEx]
+					iNdEx++
+					innerWire |= (uint64(b) & 0x7F) << shift
+					if b < 0x80 {
+						break
+					}
+				}
+				innerWireType := int(innerWire & 0x7)
+				if innerWireType == 4 {
+					break
+				}
+				next, err := skipBenchUnsafe(data[start:])
+				if err != nil {
+					return 0, err
+				}
+				iNdEx = start + next
+			}
+			return iNdEx, nil
+		case 4:
+			return iNdEx, nil
+		case 5:
+			iNdEx += 4
+			return iNdEx, nil
+		default:
+			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
+		}
+	}
+	panic("unreachable")
+}
+
+var (
+	ErrInvalidLengthBenchUnsafe = fmt.Errorf("proto: negative length found during unmarshaling")
+	ErrIntOverflowBenchUnsafe   = fmt.Errorf("proto: integer overflow")
+)

@@ -111,7 +111,7 @@ func setup(t testing.TB, mytest MyTestServer) (*grpc.Server, MyTestClient) {
 	RegisterMyTestServer(s, mytest)
 	go s.Serve(lis)
 	addr := "localhost:" + port
-	conn, err := grpc.Dial(addr)
+	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
 		t.Fatalf("Dial(%q) = %v", addr, err)
 	}

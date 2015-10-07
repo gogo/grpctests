@@ -17,34 +17,33 @@ It has these top-level messages:
 package bench
 
 import proto "github.com/gogo/protobuf/proto"
-
-// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto/gogo.pb"
-
-import unsafe "unsafe"
-
 import fmt "fmt"
+import math "math"
+
+// discarding unused import gogoproto "github.com/gogo/protobuf/gogoproto"
+
+import bytes "bytes"
+
 import strings "strings"
 import github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 import sort "sort"
 import strconv "strconv"
 import reflect "reflect"
 
-import bytes "bytes"
-
 import (
 	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
 
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConn
+import unsafe "unsafe"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
+var _ = math.Inf
 
 type Request struct {
-	Num int64 `protobuf:"varint,1,opt,proto3" json:"Num,omitempty"`
+	Num int64 `protobuf:"varint,1,opt,name=Num,proto3" json:"Num,omitempty"`
 }
 
 func (m *Request) Reset()         { *m = Request{} }
@@ -52,9 +51,9 @@ func (m *Request) String() string { return proto.CompactTextString(m) }
 func (*Request) ProtoMessage()    {}
 
 type Small struct {
-	Field3  int32  `protobuf:"varint,3,opt,proto3" json:"Field3,omitempty"`
-	Field11 uint64 `protobuf:"fixed64,11,opt,proto3" json:"Field11,omitempty"`
-	Field14 string `protobuf:"bytes,14,opt,proto3" json:"Field14,omitempty"`
+	Field3  int32  `protobuf:"varint,3,opt,name=Field3,proto3" json:"Field3,omitempty"`
+	Field11 uint64 `protobuf:"fixed64,11,opt,name=Field11,proto3" json:"Field11,omitempty"`
+	Field14 string `protobuf:"bytes,14,opt,name=Field14,proto3" json:"Field14,omitempty"`
 }
 
 func (m *Small) Reset()         { *m = Small{} }
@@ -62,21 +61,21 @@ func (m *Small) String() string { return proto.CompactTextString(m) }
 func (*Small) ProtoMessage()    {}
 
 type Medium struct {
-	Field1  float64 `protobuf:"fixed64,1,opt,proto3" json:"Field1,omitempty"`
-	Field2  float32 `protobuf:"fixed32,2,opt,proto3" json:"Field2,omitempty"`
-	Field3  int32   `protobuf:"varint,3,opt,proto3" json:"Field3,omitempty"`
-	Field4  int64   `protobuf:"varint,4,opt,proto3" json:"Field4,omitempty"`
-	Field5  uint32  `protobuf:"varint,5,opt,proto3" json:"Field5,omitempty"`
-	Field6  uint64  `protobuf:"varint,6,opt,proto3" json:"Field6,omitempty"`
-	Field7  int32   `protobuf:"zigzag32,7,opt,proto3" json:"Field7,omitempty"`
-	Field8  int64   `protobuf:"zigzag64,8,opt,proto3" json:"Field8,omitempty"`
-	Field9  uint32  `protobuf:"fixed32,9,opt,proto3" json:"Field9,omitempty"`
-	Field10 int32   `protobuf:"fixed32,10,opt,proto3" json:"Field10,omitempty"`
-	Field11 uint64  `protobuf:"fixed64,11,opt,proto3" json:"Field11,omitempty"`
-	Field12 int64   `protobuf:"fixed64,12,opt,proto3" json:"Field12,omitempty"`
-	Field13 bool    `protobuf:"varint,13,opt,proto3" json:"Field13,omitempty"`
-	Field14 string  `protobuf:"bytes,14,opt,proto3" json:"Field14,omitempty"`
-	Field15 []byte  `protobuf:"bytes,15,opt,proto3" json:"Field15,omitempty"`
+	Field1  float64 `protobuf:"fixed64,1,opt,name=Field1,proto3" json:"Field1,omitempty"`
+	Field2  float32 `protobuf:"fixed32,2,opt,name=Field2,proto3" json:"Field2,omitempty"`
+	Field3  int32   `protobuf:"varint,3,opt,name=Field3,proto3" json:"Field3,omitempty"`
+	Field4  int64   `protobuf:"varint,4,opt,name=Field4,proto3" json:"Field4,omitempty"`
+	Field5  uint32  `protobuf:"varint,5,opt,name=Field5,proto3" json:"Field5,omitempty"`
+	Field6  uint64  `protobuf:"varint,6,opt,name=Field6,proto3" json:"Field6,omitempty"`
+	Field7  int32   `protobuf:"zigzag32,7,opt,name=Field7,proto3" json:"Field7,omitempty"`
+	Field8  int64   `protobuf:"zigzag64,8,opt,name=Field8,proto3" json:"Field8,omitempty"`
+	Field9  uint32  `protobuf:"fixed32,9,opt,name=Field9,proto3" json:"Field9,omitempty"`
+	Field10 int32   `protobuf:"fixed32,10,opt,name=Field10,proto3" json:"Field10,omitempty"`
+	Field11 uint64  `protobuf:"fixed64,11,opt,name=Field11,proto3" json:"Field11,omitempty"`
+	Field12 int64   `protobuf:"fixed64,12,opt,name=Field12,proto3" json:"Field12,omitempty"`
+	Field13 bool    `protobuf:"varint,13,opt,name=Field13,proto3" json:"Field13,omitempty"`
+	Field14 string  `protobuf:"bytes,14,opt,name=Field14,proto3" json:"Field14,omitempty"`
+	Field15 []byte  `protobuf:"bytes,15,opt,name=Field15,proto3" json:"Field15,omitempty"`
 }
 
 func (m *Medium) Reset()         { *m = Medium{} }
@@ -84,16 +83,16 @@ func (m *Medium) String() string { return proto.CompactTextString(m) }
 func (*Medium) ProtoMessage()    {}
 
 type Big struct {
-	Field1  float64  `protobuf:"fixed64,1,opt,proto3" json:"Field1,omitempty"`
-	Field2  float32  `protobuf:"fixed32,2,opt,proto3" json:"Field2,omitempty"`
-	Field3  *Medium  `protobuf:"bytes,3,opt" json:"Field3,omitempty"`
-	Field4  []*Small `protobuf:"bytes,4,rep" json:"Field4,omitempty"`
-	Field6  uint64   `protobuf:"varint,6,opt,proto3" json:"Field6,omitempty"`
-	Field7  int32    `protobuf:"zigzag32,7,opt,proto3" json:"Field7,omitempty"`
-	Field8  *Medium  `protobuf:"bytes,8,opt" json:"Field8,omitempty"`
-	Field13 bool     `protobuf:"varint,13,opt,proto3" json:"Field13,omitempty"`
-	Field14 string   `protobuf:"bytes,14,opt,proto3" json:"Field14,omitempty"`
-	Field15 []byte   `protobuf:"bytes,15,opt,proto3" json:"Field15,omitempty"`
+	Field1  float64  `protobuf:"fixed64,1,opt,name=Field1,proto3" json:"Field1,omitempty"`
+	Field2  float32  `protobuf:"fixed32,2,opt,name=Field2,proto3" json:"Field2,omitempty"`
+	Field3  *Medium  `protobuf:"bytes,3,opt,name=Field3" json:"Field3,omitempty"`
+	Field4  []*Small `protobuf:"bytes,4,rep,name=Field4" json:"Field4,omitempty"`
+	Field6  uint64   `protobuf:"varint,6,opt,name=Field6,proto3" json:"Field6,omitempty"`
+	Field7  int32    `protobuf:"zigzag32,7,opt,name=Field7,proto3" json:"Field7,omitempty"`
+	Field8  *Medium  `protobuf:"bytes,8,opt,name=Field8" json:"Field8,omitempty"`
+	Field13 bool     `protobuf:"varint,13,opt,name=Field13,proto3" json:"Field13,omitempty"`
+	Field14 string   `protobuf:"bytes,14,opt,name=Field14,proto3" json:"Field14,omitempty"`
+	Field15 []byte   `protobuf:"bytes,15,opt,name=Field15,proto3" json:"Field15,omitempty"`
 }
 
 func (m *Big) Reset()         { *m = Big{} }
@@ -121,689 +120,6 @@ func (m *Big) GetField8() *Medium {
 	return nil
 }
 
-func init() {
-}
-func (m *Request) Size() (n int) {
-	var l int
-	_ = l
-	if m.Num != 0 {
-		n += 1 + sovBench(uint64(m.Num))
-	}
-	return n
-}
-
-func (m *Small) Size() (n int) {
-	var l int
-	_ = l
-	if m.Field3 != 0 {
-		n += 1 + sovBench(uint64(m.Field3))
-	}
-	if m.Field11 != 0 {
-		n += 9
-	}
-	l = len(m.Field14)
-	if l > 0 {
-		n += 1 + l + sovBench(uint64(l))
-	}
-	return n
-}
-
-func (m *Medium) Size() (n int) {
-	var l int
-	_ = l
-	if m.Field1 != 0 {
-		n += 9
-	}
-	if m.Field2 != 0 {
-		n += 5
-	}
-	if m.Field3 != 0 {
-		n += 1 + sovBench(uint64(m.Field3))
-	}
-	if m.Field4 != 0 {
-		n += 1 + sovBench(uint64(m.Field4))
-	}
-	if m.Field5 != 0 {
-		n += 1 + sovBench(uint64(m.Field5))
-	}
-	if m.Field6 != 0 {
-		n += 1 + sovBench(uint64(m.Field6))
-	}
-	if m.Field7 != 0 {
-		n += 1 + sozBench(uint64(m.Field7))
-	}
-	if m.Field8 != 0 {
-		n += 1 + sozBench(uint64(m.Field8))
-	}
-	if m.Field9 != 0 {
-		n += 5
-	}
-	if m.Field10 != 0 {
-		n += 5
-	}
-	if m.Field11 != 0 {
-		n += 9
-	}
-	if m.Field12 != 0 {
-		n += 9
-	}
-	if m.Field13 {
-		n += 2
-	}
-	l = len(m.Field14)
-	if l > 0 {
-		n += 1 + l + sovBench(uint64(l))
-	}
-	if m.Field15 != nil {
-		l = len(m.Field15)
-		if l > 0 {
-			n += 1 + l + sovBench(uint64(l))
-		}
-	}
-	return n
-}
-
-func (m *Big) Size() (n int) {
-	var l int
-	_ = l
-	if m.Field1 != 0 {
-		n += 9
-	}
-	if m.Field2 != 0 {
-		n += 5
-	}
-	l = m.Field3.Size()
-	n += 1 + l + sovBench(uint64(l))
-	if len(m.Field4) > 0 {
-		for _, e := range m.Field4 {
-			l = e.Size()
-			n += 1 + l + sovBench(uint64(l))
-		}
-	}
-	if m.Field6 != 0 {
-		n += 1 + sovBench(uint64(m.Field6))
-	}
-	if m.Field7 != 0 {
-		n += 1 + sozBench(uint64(m.Field7))
-	}
-	l = m.Field8.Size()
-	n += 1 + l + sovBench(uint64(l))
-	if m.Field13 {
-		n += 2
-	}
-	l = len(m.Field14)
-	if l > 0 {
-		n += 1 + l + sovBench(uint64(l))
-	}
-	if m.Field15 != nil {
-		l = len(m.Field15)
-		if l > 0 {
-			n += 1 + l + sovBench(uint64(l))
-		}
-	}
-	return n
-}
-
-func sovBench(x uint64) (n int) {
-	for {
-		n++
-		x >>= 7
-		if x == 0 {
-			break
-		}
-	}
-	return n
-}
-func sozBench(x uint64) (n int) {
-	return sovBench(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func NewPopulatedRequest(r randyBench, easy bool) *Request {
-	this := &Request{}
-	this.Num = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Num *= -1
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedSmall(r randyBench, easy bool) *Small {
-	this := &Small{}
-	this.Field3 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field3 *= -1
-	}
-	this.Field11 = uint64(r.Uint32())
-	this.Field14 = randStringBench(r)
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedMedium(r randyBench, easy bool) *Medium {
-	this := &Medium{}
-	this.Field1 = r.Float64()
-	if r.Intn(2) == 0 {
-		this.Field1 *= -1
-	}
-	this.Field2 = r.Float32()
-	if r.Intn(2) == 0 {
-		this.Field2 *= -1
-	}
-	this.Field3 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field3 *= -1
-	}
-	this.Field4 = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Field4 *= -1
-	}
-	this.Field5 = r.Uint32()
-	this.Field6 = uint64(r.Uint32())
-	this.Field7 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field7 *= -1
-	}
-	this.Field8 = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Field8 *= -1
-	}
-	this.Field9 = r.Uint32()
-	this.Field10 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field10 *= -1
-	}
-	this.Field11 = uint64(r.Uint32())
-	this.Field12 = r.Int63()
-	if r.Intn(2) == 0 {
-		this.Field12 *= -1
-	}
-	this.Field13 = bool(r.Intn(2) == 0)
-	this.Field14 = randStringBench(r)
-	v1 := r.Intn(100)
-	this.Field15 = make([]byte, v1)
-	for i := 0; i < v1; i++ {
-		this.Field15[i] = byte(r.Intn(256))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-func NewPopulatedBig(r randyBench, easy bool) *Big {
-	this := &Big{}
-	this.Field1 = r.Float64()
-	if r.Intn(2) == 0 {
-		this.Field1 *= -1
-	}
-	this.Field2 = r.Float32()
-	if r.Intn(2) == 0 {
-		this.Field2 *= -1
-	}
-	this.Field3 = NewPopulatedMedium(r, easy)
-	v2 := r.Intn(10)
-	this.Field4 = make([]*Small, v2)
-	for i := 0; i < v2; i++ {
-		this.Field4[i] = NewPopulatedSmall(r, easy)
-	}
-	this.Field6 = uint64(r.Uint32())
-	this.Field7 = r.Int31()
-	if r.Intn(2) == 0 {
-		this.Field7 *= -1
-	}
-	this.Field8 = NewPopulatedMedium(r, easy)
-	this.Field13 = bool(r.Intn(2) == 0)
-	this.Field14 = randStringBench(r)
-	v3 := r.Intn(100)
-	this.Field15 = make([]byte, v3)
-	for i := 0; i < v3; i++ {
-		this.Field15[i] = byte(r.Intn(256))
-	}
-	if !easy && r.Intn(10) != 0 {
-	}
-	return this
-}
-
-type randyBench interface {
-	Float32() float32
-	Float64() float64
-	Int63() int64
-	Int31() int32
-	Uint32() uint32
-	Intn(n int) int
-}
-
-func randUTF8RuneBench(r randyBench) rune {
-	ru := r.Intn(62)
-	if ru < 10 {
-		return rune(ru + 48)
-	} else if ru < 36 {
-		return rune(ru + 55)
-	}
-	return rune(ru + 61)
-}
-func randStringBench(r randyBench) string {
-	v4 := r.Intn(100)
-	tmps := make([]rune, v4)
-	for i := 0; i < v4; i++ {
-		tmps[i] = randUTF8RuneBench(r)
-	}
-	return string(tmps)
-}
-func randUnrecognizedBench(r randyBench, maxFieldNumber int) (data []byte) {
-	l := r.Intn(5)
-	for i := 0; i < l; i++ {
-		wire := r.Intn(4)
-		if wire == 3 {
-			wire = 5
-		}
-		fieldNumber := maxFieldNumber + r.Intn(100)
-		data = randFieldBench(data, r, fieldNumber, wire)
-	}
-	return data
-}
-func randFieldBench(data []byte, r randyBench, fieldNumber int, wire int) []byte {
-	key := uint32(fieldNumber)<<3 | uint32(wire)
-	switch wire {
-	case 0:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		v5 := r.Int63()
-		if r.Intn(2) == 0 {
-			v5 *= -1
-		}
-		data = encodeVarintPopulateBench(data, uint64(v5))
-	case 1:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	case 2:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		ll := r.Intn(100)
-		data = encodeVarintPopulateBench(data, uint64(ll))
-		for j := 0; j < ll; j++ {
-			data = append(data, byte(r.Intn(256)))
-		}
-	default:
-		data = encodeVarintPopulateBench(data, uint64(key))
-		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
-	}
-	return data
-}
-func encodeVarintPopulateBench(data []byte, v uint64) []byte {
-	for v >= 1<<7 {
-		data = append(data, uint8(uint64(v)&0x7f|0x80))
-		v >>= 7
-	}
-	data = append(data, uint8(v))
-	return data
-}
-func (m *Request) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *Request) MarshalTo(data []byte) (n int, err error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Num != 0 {
-		data[i] = 0x8
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Num))
-	}
-	return i, nil
-}
-
-func (m *Small) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *Small) MarshalTo(data []byte) (n int, err error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Field3 != 0 {
-		data[i] = 0x18
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Field3))
-	}
-	if m.Field11 != 0 {
-		data[i] = 0x59
-		i++
-		*(*uint64)(unsafe.Pointer(&data[i])) = m.Field11
-		i += 8
-	}
-	if len(m.Field14) > 0 {
-		data[i] = 0x72
-		i++
-		i = encodeVarintBench(data, i, uint64(len(m.Field14)))
-		i += copy(data[i:], m.Field14)
-	}
-	return i, nil
-}
-
-func (m *Medium) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *Medium) MarshalTo(data []byte) (n int, err error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Field1 != 0 {
-		data[i] = 0x9
-		i++
-		*(*float64)(unsafe.Pointer(&data[i])) = m.Field1
-		i += 8
-	}
-	if m.Field2 != 0 {
-		data[i] = 0x15
-		i++
-		*(*float32)(unsafe.Pointer(&data[i])) = m.Field2
-		i += 4
-	}
-	if m.Field3 != 0 {
-		data[i] = 0x18
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Field3))
-	}
-	if m.Field4 != 0 {
-		data[i] = 0x20
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Field4))
-	}
-	if m.Field5 != 0 {
-		data[i] = 0x28
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Field5))
-	}
-	if m.Field6 != 0 {
-		data[i] = 0x30
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Field6))
-	}
-	if m.Field7 != 0 {
-		data[i] = 0x38
-		i++
-		i = encodeVarintBench(data, i, uint64((uint32(m.Field7)<<1)^uint32((m.Field7>>31))))
-	}
-	if m.Field8 != 0 {
-		data[i] = 0x40
-		i++
-		i = encodeVarintBench(data, i, uint64((uint64(m.Field8)<<1)^uint64((m.Field8>>63))))
-	}
-	if m.Field9 != 0 {
-		data[i] = 0x4d
-		i++
-		*(*uint32)(unsafe.Pointer(&data[i])) = m.Field9
-		i += 4
-	}
-	if m.Field10 != 0 {
-		data[i] = 0x55
-		i++
-		*(*int32)(unsafe.Pointer(&data[i])) = m.Field10
-		i += 4
-	}
-	if m.Field11 != 0 {
-		data[i] = 0x59
-		i++
-		*(*uint64)(unsafe.Pointer(&data[i])) = m.Field11
-		i += 8
-	}
-	if m.Field12 != 0 {
-		data[i] = 0x61
-		i++
-		*(*int64)(unsafe.Pointer(&data[i])) = m.Field12
-		i += 8
-	}
-	if m.Field13 {
-		data[i] = 0x68
-		i++
-		if m.Field13 {
-			data[i] = 1
-		} else {
-			data[i] = 0
-		}
-		i++
-	}
-	if len(m.Field14) > 0 {
-		data[i] = 0x72
-		i++
-		i = encodeVarintBench(data, i, uint64(len(m.Field14)))
-		i += copy(data[i:], m.Field14)
-	}
-	if m.Field15 != nil {
-		if len(m.Field15) > 0 {
-			data[i] = 0x7a
-			i++
-			i = encodeVarintBench(data, i, uint64(len(m.Field15)))
-			i += copy(data[i:], m.Field15)
-		}
-	}
-	return i, nil
-}
-
-func (m *Big) Marshal() (data []byte, err error) {
-	size := m.Size()
-	data = make([]byte, size)
-	n, err := m.MarshalTo(data)
-	if err != nil {
-		return nil, err
-	}
-	return data[:n], nil
-}
-
-func (m *Big) MarshalTo(data []byte) (n int, err error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
-	if m.Field1 != 0 {
-		data[i] = 0x9
-		i++
-		*(*float64)(unsafe.Pointer(&data[i])) = m.Field1
-		i += 8
-	}
-	if m.Field2 != 0 {
-		data[i] = 0x15
-		i++
-		*(*float32)(unsafe.Pointer(&data[i])) = m.Field2
-		i += 4
-	}
-	data[i] = 0x1a
-	i++
-	i = encodeVarintBench(data, i, uint64(m.Field3.Size()))
-	n1, err := m.Field3.MarshalTo(data[i:])
-	if err != nil {
-		return 0, err
-	}
-	i += n1
-	if len(m.Field4) > 0 {
-		for _, msg := range m.Field4 {
-			data[i] = 0x22
-			i++
-			i = encodeVarintBench(data, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(data[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Field6 != 0 {
-		data[i] = 0x30
-		i++
-		i = encodeVarintBench(data, i, uint64(m.Field6))
-	}
-	if m.Field7 != 0 {
-		data[i] = 0x38
-		i++
-		i = encodeVarintBench(data, i, uint64((uint32(m.Field7)<<1)^uint32((m.Field7>>31))))
-	}
-	data[i] = 0x42
-	i++
-	i = encodeVarintBench(data, i, uint64(m.Field8.Size()))
-	n2, err := m.Field8.MarshalTo(data[i:])
-	if err != nil {
-		return 0, err
-	}
-	i += n2
-	if m.Field13 {
-		data[i] = 0x68
-		i++
-		if m.Field13 {
-			data[i] = 1
-		} else {
-			data[i] = 0
-		}
-		i++
-	}
-	if len(m.Field14) > 0 {
-		data[i] = 0x72
-		i++
-		i = encodeVarintBench(data, i, uint64(len(m.Field14)))
-		i += copy(data[i:], m.Field14)
-	}
-	if m.Field15 != nil {
-		if len(m.Field15) > 0 {
-			data[i] = 0x7a
-			i++
-			i = encodeVarintBench(data, i, uint64(len(m.Field15)))
-			i += copy(data[i:], m.Field15)
-		}
-	}
-	return i, nil
-}
-
-func encodeFixed64Bench(data []byte, offset int, v uint64) int {
-	data[offset] = uint8(v)
-	data[offset+1] = uint8(v >> 8)
-	data[offset+2] = uint8(v >> 16)
-	data[offset+3] = uint8(v >> 24)
-	data[offset+4] = uint8(v >> 32)
-	data[offset+5] = uint8(v >> 40)
-	data[offset+6] = uint8(v >> 48)
-	data[offset+7] = uint8(v >> 56)
-	return offset + 8
-}
-func encodeFixed32Bench(data []byte, offset int, v uint32) int {
-	data[offset] = uint8(v)
-	data[offset+1] = uint8(v >> 8)
-	data[offset+2] = uint8(v >> 16)
-	data[offset+3] = uint8(v >> 24)
-	return offset + 4
-}
-func encodeVarintBench(data []byte, offset int, v uint64) int {
-	for v >= 1<<7 {
-		data[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	data[offset] = uint8(v)
-	return offset + 1
-}
-func (this *Request) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Request{` +
-		`Num:` + fmt.Sprintf("%#v", this.Num) + `}`}, ", ")
-	return s
-}
-func (this *Small) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Small{` +
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14) + `}`}, ", ")
-	return s
-}
-func (this *Medium) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Medium{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field5:` + fmt.Sprintf("%#v", this.Field5),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field9:` + fmt.Sprintf("%#v", this.Field9),
-		`Field10:` + fmt.Sprintf("%#v", this.Field10),
-		`Field11:` + fmt.Sprintf("%#v", this.Field11),
-		`Field12:` + fmt.Sprintf("%#v", this.Field12),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15) + `}`}, ", ")
-	return s
-}
-func (this *Big) GoString() string {
-	if this == nil {
-		return "nil"
-	}
-	s := strings.Join([]string{`&bench.Big{` +
-		`Field1:` + fmt.Sprintf("%#v", this.Field1),
-		`Field2:` + fmt.Sprintf("%#v", this.Field2),
-		`Field3:` + fmt.Sprintf("%#v", this.Field3),
-		`Field4:` + fmt.Sprintf("%#v", this.Field4),
-		`Field6:` + fmt.Sprintf("%#v", this.Field6),
-		`Field7:` + fmt.Sprintf("%#v", this.Field7),
-		`Field8:` + fmt.Sprintf("%#v", this.Field8),
-		`Field13:` + fmt.Sprintf("%#v", this.Field13),
-		`Field14:` + fmt.Sprintf("%#v", this.Field14),
-		`Field15:` + fmt.Sprintf("%#v", this.Field15) + `}`}, ", ")
-	return s
-}
-func valueToGoStringBench(v interface{}, typ string) string {
-	rv := reflect.ValueOf(v)
-	if rv.IsNil() {
-		return "nil"
-	}
-	pv := reflect.Indirect(rv).Interface()
-	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
-}
-func extensionToGoStringBench(e map[int32]github_com_gogo_protobuf_proto.Extension) string {
-	if e == nil {
-		return "nil"
-	}
-	s := "map[int32]proto.Extension{"
-	keys := make([]int, 0, len(e))
-	for k := range e {
-		keys = append(keys, int(k))
-	}
-	sort.Ints(keys)
-	ss := []string{}
-	for _, k := range keys {
-		ss = append(ss, strconv.Itoa(k)+": "+e[int32(k)].GoString())
-	}
-	s += strings.Join(ss, ",") + "}"
-	return s
-}
 func (this *Request) VerboseEqual(that interface{}) error {
 	if that == nil {
 		if this == nil {
@@ -1164,6 +480,106 @@ func (this *Big) Equal(that interface{}) bool {
 	}
 	return true
 }
+func (this *Request) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 5)
+	s = append(s, "&bench.Request{")
+	s = append(s, "Num: "+fmt.Sprintf("%#v", this.Num)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Small) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 7)
+	s = append(s, "&bench.Small{")
+	s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Medium) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 19)
+	s = append(s, "&bench.Medium{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	s = append(s, "Field5: "+fmt.Sprintf("%#v", this.Field5)+",\n")
+	s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	s = append(s, "Field9: "+fmt.Sprintf("%#v", this.Field9)+",\n")
+	s = append(s, "Field10: "+fmt.Sprintf("%#v", this.Field10)+",\n")
+	s = append(s, "Field11: "+fmt.Sprintf("%#v", this.Field11)+",\n")
+	s = append(s, "Field12: "+fmt.Sprintf("%#v", this.Field12)+",\n")
+	s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func (this *Big) GoString() string {
+	if this == nil {
+		return "nil"
+	}
+	s := make([]string, 0, 14)
+	s = append(s, "&bench.Big{")
+	s = append(s, "Field1: "+fmt.Sprintf("%#v", this.Field1)+",\n")
+	s = append(s, "Field2: "+fmt.Sprintf("%#v", this.Field2)+",\n")
+	if this.Field3 != nil {
+		s = append(s, "Field3: "+fmt.Sprintf("%#v", this.Field3)+",\n")
+	}
+	if this.Field4 != nil {
+		s = append(s, "Field4: "+fmt.Sprintf("%#v", this.Field4)+",\n")
+	}
+	s = append(s, "Field6: "+fmt.Sprintf("%#v", this.Field6)+",\n")
+	s = append(s, "Field7: "+fmt.Sprintf("%#v", this.Field7)+",\n")
+	if this.Field8 != nil {
+		s = append(s, "Field8: "+fmt.Sprintf("%#v", this.Field8)+",\n")
+	}
+	s = append(s, "Field13: "+fmt.Sprintf("%#v", this.Field13)+",\n")
+	s = append(s, "Field14: "+fmt.Sprintf("%#v", this.Field14)+",\n")
+	s = append(s, "Field15: "+fmt.Sprintf("%#v", this.Field15)+",\n")
+	s = append(s, "}")
+	return strings.Join(s, "")
+}
+func valueToGoStringBench(v interface{}, typ string) string {
+	rv := reflect.ValueOf(v)
+	if rv.IsNil() {
+		return "nil"
+	}
+	pv := reflect.Indirect(rv).Interface()
+	return fmt.Sprintf("func(v %v) *%v { return &v } ( %#v )", typ, typ, pv)
+}
+func extensionToGoStringBench(e map[int32]github_com_gogo_protobuf_proto.Extension) string {
+	if e == nil {
+		return "nil"
+	}
+	s := "map[int32]proto.Extension{"
+	keys := make([]int, 0, len(e))
+	for k := range e {
+		keys = append(keys, int(k))
+	}
+	sort.Ints(keys)
+	ss := []string{}
+	for _, k := range keys {
+		ss = append(ss, strconv.Itoa(k)+": "+e[int32(k)].GoString())
+	}
+	s += strings.Join(ss, ",") + "}"
+	return s
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
 
 // Client API for Bencher service
 
@@ -1373,4 +789,618 @@ var _Bencher_serviceDesc = grpc.ServiceDesc{
 			ServerStreams: true,
 		},
 	},
+}
+
+func NewPopulatedRequest(r randyBench, easy bool) *Request {
+	this := &Request{}
+	this.Num = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Num *= -1
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedSmall(r randyBench, easy bool) *Small {
+	this := &Small{}
+	this.Field3 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field3 *= -1
+	}
+	this.Field11 = uint64(uint64(r.Uint32()))
+	this.Field14 = randStringBench(r)
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedMedium(r randyBench, easy bool) *Medium {
+	this := &Medium{}
+	this.Field1 = float64(r.Float64())
+	if r.Intn(2) == 0 {
+		this.Field1 *= -1
+	}
+	this.Field2 = float32(r.Float32())
+	if r.Intn(2) == 0 {
+		this.Field2 *= -1
+	}
+	this.Field3 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field3 *= -1
+	}
+	this.Field4 = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Field4 *= -1
+	}
+	this.Field5 = uint32(r.Uint32())
+	this.Field6 = uint64(uint64(r.Uint32()))
+	this.Field7 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field7 *= -1
+	}
+	this.Field8 = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Field8 *= -1
+	}
+	this.Field9 = uint32(r.Uint32())
+	this.Field10 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field10 *= -1
+	}
+	this.Field11 = uint64(uint64(r.Uint32()))
+	this.Field12 = int64(r.Int63())
+	if r.Intn(2) == 0 {
+		this.Field12 *= -1
+	}
+	this.Field13 = bool(bool(r.Intn(2) == 0))
+	this.Field14 = randStringBench(r)
+	v1 := r.Intn(100)
+	this.Field15 = make([]byte, v1)
+	for i := 0; i < v1; i++ {
+		this.Field15[i] = byte(r.Intn(256))
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedBig(r randyBench, easy bool) *Big {
+	this := &Big{}
+	this.Field1 = float64(r.Float64())
+	if r.Intn(2) == 0 {
+		this.Field1 *= -1
+	}
+	this.Field2 = float32(r.Float32())
+	if r.Intn(2) == 0 {
+		this.Field2 *= -1
+	}
+	if r.Intn(10) != 0 {
+		this.Field3 = NewPopulatedMedium(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v2 := r.Intn(10)
+		this.Field4 = make([]*Small, v2)
+		for i := 0; i < v2; i++ {
+			this.Field4[i] = NewPopulatedSmall(r, easy)
+		}
+	}
+	this.Field6 = uint64(uint64(r.Uint32()))
+	this.Field7 = int32(r.Int31())
+	if r.Intn(2) == 0 {
+		this.Field7 *= -1
+	}
+	if r.Intn(10) != 0 {
+		this.Field8 = NewPopulatedMedium(r, easy)
+	}
+	this.Field13 = bool(bool(r.Intn(2) == 0))
+	this.Field14 = randStringBench(r)
+	v3 := r.Intn(100)
+	this.Field15 = make([]byte, v3)
+	for i := 0; i < v3; i++ {
+		this.Field15[i] = byte(r.Intn(256))
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+type randyBench interface {
+	Float32() float32
+	Float64() float64
+	Int63() int64
+	Int31() int32
+	Uint32() uint32
+	Intn(n int) int
+}
+
+func randUTF8RuneBench(r randyBench) rune {
+	ru := r.Intn(62)
+	if ru < 10 {
+		return rune(ru + 48)
+	} else if ru < 36 {
+		return rune(ru + 55)
+	}
+	return rune(ru + 61)
+}
+func randStringBench(r randyBench) string {
+	v4 := r.Intn(100)
+	tmps := make([]rune, v4)
+	for i := 0; i < v4; i++ {
+		tmps[i] = randUTF8RuneBench(r)
+	}
+	return string(tmps)
+}
+func randUnrecognizedBench(r randyBench, maxFieldNumber int) (data []byte) {
+	l := r.Intn(5)
+	for i := 0; i < l; i++ {
+		wire := r.Intn(4)
+		if wire == 3 {
+			wire = 5
+		}
+		fieldNumber := maxFieldNumber + r.Intn(100)
+		data = randFieldBench(data, r, fieldNumber, wire)
+	}
+	return data
+}
+func randFieldBench(data []byte, r randyBench, fieldNumber int, wire int) []byte {
+	key := uint32(fieldNumber)<<3 | uint32(wire)
+	switch wire {
+	case 0:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		v5 := r.Int63()
+		if r.Intn(2) == 0 {
+			v5 *= -1
+		}
+		data = encodeVarintPopulateBench(data, uint64(v5))
+	case 1:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
+	case 2:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		ll := r.Intn(100)
+		data = encodeVarintPopulateBench(data, uint64(ll))
+		for j := 0; j < ll; j++ {
+			data = append(data, byte(r.Intn(256)))
+		}
+	default:
+		data = encodeVarintPopulateBench(data, uint64(key))
+		data = append(data, byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)), byte(r.Intn(256)))
+	}
+	return data
+}
+func encodeVarintPopulateBench(data []byte, v uint64) []byte {
+	for v >= 1<<7 {
+		data = append(data, uint8(uint64(v)&0x7f|0x80))
+		v >>= 7
+	}
+	data = append(data, uint8(v))
+	return data
+}
+func (m *Request) Size() (n int) {
+	var l int
+	_ = l
+	if m.Num != 0 {
+		n += 1 + sovBench(uint64(m.Num))
+	}
+	return n
+}
+
+func (m *Small) Size() (n int) {
+	var l int
+	_ = l
+	if m.Field3 != 0 {
+		n += 1 + sovBench(uint64(m.Field3))
+	}
+	if m.Field11 != 0 {
+		n += 9
+	}
+	l = len(m.Field14)
+	if l > 0 {
+		n += 1 + l + sovBench(uint64(l))
+	}
+	return n
+}
+
+func (m *Medium) Size() (n int) {
+	var l int
+	_ = l
+	if m.Field1 != 0 {
+		n += 9
+	}
+	if m.Field2 != 0 {
+		n += 5
+	}
+	if m.Field3 != 0 {
+		n += 1 + sovBench(uint64(m.Field3))
+	}
+	if m.Field4 != 0 {
+		n += 1 + sovBench(uint64(m.Field4))
+	}
+	if m.Field5 != 0 {
+		n += 1 + sovBench(uint64(m.Field5))
+	}
+	if m.Field6 != 0 {
+		n += 1 + sovBench(uint64(m.Field6))
+	}
+	if m.Field7 != 0 {
+		n += 1 + sozBench(uint64(m.Field7))
+	}
+	if m.Field8 != 0 {
+		n += 1 + sozBench(uint64(m.Field8))
+	}
+	if m.Field9 != 0 {
+		n += 5
+	}
+	if m.Field10 != 0 {
+		n += 5
+	}
+	if m.Field11 != 0 {
+		n += 9
+	}
+	if m.Field12 != 0 {
+		n += 9
+	}
+	if m.Field13 {
+		n += 2
+	}
+	l = len(m.Field14)
+	if l > 0 {
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if m.Field15 != nil {
+		l = len(m.Field15)
+		if l > 0 {
+			n += 1 + l + sovBench(uint64(l))
+		}
+	}
+	return n
+}
+
+func (m *Big) Size() (n int) {
+	var l int
+	_ = l
+	if m.Field1 != 0 {
+		n += 9
+	}
+	if m.Field2 != 0 {
+		n += 5
+	}
+	if m.Field3 != nil {
+		l = m.Field3.Size()
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if len(m.Field4) > 0 {
+		for _, e := range m.Field4 {
+			l = e.Size()
+			n += 1 + l + sovBench(uint64(l))
+		}
+	}
+	if m.Field6 != 0 {
+		n += 1 + sovBench(uint64(m.Field6))
+	}
+	if m.Field7 != 0 {
+		n += 1 + sozBench(uint64(m.Field7))
+	}
+	if m.Field8 != nil {
+		l = m.Field8.Size()
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if m.Field13 {
+		n += 2
+	}
+	l = len(m.Field14)
+	if l > 0 {
+		n += 1 + l + sovBench(uint64(l))
+	}
+	if m.Field15 != nil {
+		l = len(m.Field15)
+		if l > 0 {
+			n += 1 + l + sovBench(uint64(l))
+		}
+	}
+	return n
+}
+
+func sovBench(x uint64) (n int) {
+	for {
+		n++
+		x >>= 7
+		if x == 0 {
+			break
+		}
+	}
+	return n
+}
+func sozBench(x uint64) (n int) {
+	return sovBench(uint64((x << 1) ^ uint64((int64(x) >> 63))))
+}
+func (m *Request) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Request) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Num != 0 {
+		data[i] = 0x8
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Num))
+	}
+	return i, nil
+}
+
+func (m *Small) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Small) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field3 != 0 {
+		data[i] = 0x18
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field3))
+	}
+	if m.Field11 != 0 {
+		data[i] = 0x59
+		i++
+		*(*uint64)(unsafe.Pointer(&data[i])) = m.Field11
+		i += 8
+	}
+	if len(m.Field14) > 0 {
+		data[i] = 0x72
+		i++
+		i = encodeVarintBench(data, i, uint64(len(m.Field14)))
+		i += copy(data[i:], m.Field14)
+	}
+	return i, nil
+}
+
+func (m *Medium) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Medium) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field1 != 0 {
+		data[i] = 0x9
+		i++
+		*(*float64)(unsafe.Pointer(&data[i])) = m.Field1
+		i += 8
+	}
+	if m.Field2 != 0 {
+		data[i] = 0x15
+		i++
+		*(*float32)(unsafe.Pointer(&data[i])) = m.Field2
+		i += 4
+	}
+	if m.Field3 != 0 {
+		data[i] = 0x18
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field3))
+	}
+	if m.Field4 != 0 {
+		data[i] = 0x20
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field4))
+	}
+	if m.Field5 != 0 {
+		data[i] = 0x28
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field5))
+	}
+	if m.Field6 != 0 {
+		data[i] = 0x30
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field6))
+	}
+	if m.Field7 != 0 {
+		data[i] = 0x38
+		i++
+		i = encodeVarintBench(data, i, uint64((uint32(m.Field7)<<1)^uint32((m.Field7>>31))))
+	}
+	if m.Field8 != 0 {
+		data[i] = 0x40
+		i++
+		i = encodeVarintBench(data, i, uint64((uint64(m.Field8)<<1)^uint64((m.Field8>>63))))
+	}
+	if m.Field9 != 0 {
+		data[i] = 0x4d
+		i++
+		*(*uint32)(unsafe.Pointer(&data[i])) = m.Field9
+		i += 4
+	}
+	if m.Field10 != 0 {
+		data[i] = 0x55
+		i++
+		*(*int32)(unsafe.Pointer(&data[i])) = m.Field10
+		i += 4
+	}
+	if m.Field11 != 0 {
+		data[i] = 0x59
+		i++
+		*(*uint64)(unsafe.Pointer(&data[i])) = m.Field11
+		i += 8
+	}
+	if m.Field12 != 0 {
+		data[i] = 0x61
+		i++
+		*(*int64)(unsafe.Pointer(&data[i])) = m.Field12
+		i += 8
+	}
+	if m.Field13 {
+		data[i] = 0x68
+		i++
+		if m.Field13 {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.Field14) > 0 {
+		data[i] = 0x72
+		i++
+		i = encodeVarintBench(data, i, uint64(len(m.Field14)))
+		i += copy(data[i:], m.Field14)
+	}
+	if m.Field15 != nil {
+		if len(m.Field15) > 0 {
+			data[i] = 0x7a
+			i++
+			i = encodeVarintBench(data, i, uint64(len(m.Field15)))
+			i += copy(data[i:], m.Field15)
+		}
+	}
+	return i, nil
+}
+
+func (m *Big) Marshal() (data []byte, err error) {
+	size := m.Size()
+	data = make([]byte, size)
+	n, err := m.MarshalTo(data)
+	if err != nil {
+		return nil, err
+	}
+	return data[:n], nil
+}
+
+func (m *Big) MarshalTo(data []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Field1 != 0 {
+		data[i] = 0x9
+		i++
+		*(*float64)(unsafe.Pointer(&data[i])) = m.Field1
+		i += 8
+	}
+	if m.Field2 != 0 {
+		data[i] = 0x15
+		i++
+		*(*float32)(unsafe.Pointer(&data[i])) = m.Field2
+		i += 4
+	}
+	if m.Field3 != nil {
+		data[i] = 0x1a
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field3.Size()))
+		n1, err := m.Field3.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n1
+	}
+	if len(m.Field4) > 0 {
+		for _, msg := range m.Field4 {
+			data[i] = 0x22
+			i++
+			i = encodeVarintBench(data, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(data[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	if m.Field6 != 0 {
+		data[i] = 0x30
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field6))
+	}
+	if m.Field7 != 0 {
+		data[i] = 0x38
+		i++
+		i = encodeVarintBench(data, i, uint64((uint32(m.Field7)<<1)^uint32((m.Field7>>31))))
+	}
+	if m.Field8 != nil {
+		data[i] = 0x42
+		i++
+		i = encodeVarintBench(data, i, uint64(m.Field8.Size()))
+		n2, err := m.Field8.MarshalTo(data[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n2
+	}
+	if m.Field13 {
+		data[i] = 0x68
+		i++
+		if m.Field13 {
+			data[i] = 1
+		} else {
+			data[i] = 0
+		}
+		i++
+	}
+	if len(m.Field14) > 0 {
+		data[i] = 0x72
+		i++
+		i = encodeVarintBench(data, i, uint64(len(m.Field14)))
+		i += copy(data[i:], m.Field14)
+	}
+	if m.Field15 != nil {
+		if len(m.Field15) > 0 {
+			data[i] = 0x7a
+			i++
+			i = encodeVarintBench(data, i, uint64(len(m.Field15)))
+			i += copy(data[i:], m.Field15)
+		}
+	}
+	return i, nil
+}
+
+func encodeFixed64Bench(data []byte, offset int, v uint64) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	data[offset+4] = uint8(v >> 32)
+	data[offset+5] = uint8(v >> 40)
+	data[offset+6] = uint8(v >> 48)
+	data[offset+7] = uint8(v >> 56)
+	return offset + 8
+}
+func encodeFixed32Bench(data []byte, offset int, v uint32) int {
+	data[offset] = uint8(v)
+	data[offset+1] = uint8(v >> 8)
+	data[offset+2] = uint8(v >> 16)
+	data[offset+3] = uint8(v >> 24)
+	return offset + 4
+}
+func encodeVarintBench(data []byte, offset int, v uint64) int {
+	for v >= 1<<7 {
+		data[offset] = uint8(v&0x7f | 0x80)
+		v >>= 7
+		offset++
+	}
+	data[offset] = uint8(v)
+	return offset + 1
 }

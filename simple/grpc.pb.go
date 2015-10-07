@@ -17,6 +17,8 @@
 package grpc
 
 import proto "github.com/gogo/protobuf/proto"
+import fmt "fmt"
+import math "math"
 import test "github.com/gogo/protobuf/test"
 
 import (
@@ -25,14 +27,12 @@ import (
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc1.ClientConn
-
-// Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
+var _ = math.Inf
 
 type MyRequest struct {
-	Value int64 `protobuf:"varint,1,opt,proto3" json:"Value,omitempty"`
+	Value int64 `protobuf:"varint,1,opt,name=Value,proto3" json:"Value,omitempty"`
 }
 
 func (m *MyRequest) Reset()         { *m = MyRequest{} }
@@ -40,7 +40,7 @@ func (m *MyRequest) String() string { return proto.CompactTextString(m) }
 func (*MyRequest) ProtoMessage()    {}
 
 type MyResponse struct {
-	Value int64 `protobuf:"varint,1,opt,proto3" json:"Value,omitempty"`
+	Value int64 `protobuf:"varint,1,opt,name=Value,proto3" json:"Value,omitempty"`
 }
 
 func (m *MyResponse) Reset()         { *m = MyResponse{} }
@@ -48,7 +48,7 @@ func (m *MyResponse) String() string { return proto.CompactTextString(m) }
 func (*MyResponse) ProtoMessage()    {}
 
 type MyMsg struct {
-	Value int64 `protobuf:"varint,1,opt,proto3" json:"Value,omitempty"`
+	Value int64 `protobuf:"varint,1,opt,name=Value,proto3" json:"Value,omitempty"`
 }
 
 func (m *MyMsg) Reset()         { *m = MyMsg{} }
@@ -56,15 +56,16 @@ func (m *MyMsg) String() string { return proto.CompactTextString(m) }
 func (*MyMsg) ProtoMessage()    {}
 
 type MyMsg2 struct {
-	Value int64 `protobuf:"varint,1,opt,proto3" json:"Value,omitempty"`
+	Value int64 `protobuf:"varint,1,opt,name=Value,proto3" json:"Value,omitempty"`
 }
 
 func (m *MyMsg2) Reset()         { *m = MyMsg2{} }
 func (m *MyMsg2) String() string { return proto.CompactTextString(m) }
 func (*MyMsg2) ProtoMessage()    {}
 
-func init() {
-}
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc1.ClientConn
 
 // Client API for MyTest service
 
@@ -208,9 +209,9 @@ func RegisterMyTestServer(s *grpc1.Server, srv MyTestServer) {
 	s.RegisterService(&_MyTest_serviceDesc, srv)
 }
 
-func _MyTest_UnaryCall_Handler(srv interface{}, ctx context.Context, codec grpc1.Codec, buf []byte) (interface{}, error) {
+func _MyTest_UnaryCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
 	in := new(MyRequest)
-	if err := codec.Unmarshal(buf, in); err != nil {
+	if err := dec(in); err != nil {
 		return nil, err
 	}
 	out, err := srv.(MyTestServer).UnaryCall(ctx, in)
