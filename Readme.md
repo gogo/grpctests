@@ -1,6 +1,6 @@
 # grpctests for gogoprotobuf
 
-[![Build Status](https://drone.io/github.com/gogo/grpctests/status.png)](https://drone.io/github.com/gogo/grpctests/latest)
+[![Build Status](https://travis-ci.org/gogo/grpctests.svg?branch=master)](https://travis-ci.org/gogo/grpctests)
 
 [grpc.io](http://www.grpc.io/) introduces a couple of dependencies including:
 

@@ -37,13 +37,14 @@ test:
 	go test -v ./...
 
 gofmt:
+
 	gofmt -l -s -w .
 
-drone:
-	sudo apt-get install protobuf-compiler
+buildserverall:
 	go get golang.org/x/net/context
 	go get google.golang.org/grpc
-	mkdir -p $(GOPATH)/src/github.com/gogo/protobuf
-	git clone https://github.com/gogo/protobuf $(GOPATH)/src/github.com/gogo/protobuf
-	(cd $(GOPATH)/src/github.com/gogo/protobuf && make)
+	go get github.com/gogo/protobuf/protoc-gen-gogo
+	go get github.com/gogo/protobuf/protoc-min-version
+	go get github.com/gogo/protobuf/protoc-gen-combo
+	go get github.com/gogo/protobuf/protoc-gen-gofast
 	make all
