@@ -30,14 +30,19 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the proto package it is being compiled against.
+const _ = proto.ProtoPackageIsVersion1
+
 type MyRequest struct {
-	Value            *int64 `protobuf:"varint,1,opt,name=Value" json:"Value,omitempty"`
+	Value            *int64 `protobuf:"varint,1,opt,name=Value,json=value" json:"Value,omitempty"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *MyRequest) Reset()         { *m = MyRequest{} }
-func (m *MyRequest) String() string { return proto.CompactTextString(m) }
-func (*MyRequest) ProtoMessage()    {}
+func (m *MyRequest) Reset()                    { *m = MyRequest{} }
+func (m *MyRequest) String() string            { return proto.CompactTextString(m) }
+func (*MyRequest) ProtoMessage()               {}
+func (*MyRequest) Descriptor() ([]byte, []int) { return fileDescriptorGofast, []int{0} }
 
 func (m *MyRequest) GetValue() int64 {
 	if m != nil && m.Value != nil {
@@ -47,13 +52,14 @@ func (m *MyRequest) GetValue() int64 {
 }
 
 type MyResponse struct {
-	Value            *int64 `protobuf:"varint,1,opt,name=Value" json:"Value,omitempty"`
+	Value            *int64 `protobuf:"varint,1,opt,name=Value,json=value" json:"Value,omitempty"`
 	XXX_unrecognized []byte `json:"-"`
 }
 
-func (m *MyResponse) Reset()         { *m = MyResponse{} }
-func (m *MyResponse) String() string { return proto.CompactTextString(m) }
-func (*MyResponse) ProtoMessage()    {}
+func (m *MyResponse) Reset()                    { *m = MyResponse{} }
+func (m *MyResponse) String() string            { return proto.CompactTextString(m) }
+func (*MyResponse) ProtoMessage()               {}
+func (*MyResponse) Descriptor() ([]byte, []int) { return fileDescriptorGofast, []int{1} }
 
 func (m *MyResponse) GetValue() int64 {
 	if m != nil && m.Value != nil {
@@ -62,9 +68,18 @@ func (m *MyResponse) GetValue() int64 {
 	return 0
 }
 
+func init() {
+	proto.RegisterType((*MyRequest)(nil), "gofast.MyRequest")
+	proto.RegisterType((*MyResponse)(nil), "gofast.MyResponse")
+}
+
 // Reference imports to suppress errors if they are not otherwise used.
 var _ context.Context
 var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion2
 
 // Client API for MyTest service
 
@@ -99,16 +114,22 @@ func RegisterMyTestServer(s *grpc.Server, srv MyTestServer) {
 	s.RegisterService(&_MyTest_serviceDesc, srv)
 }
 
-func _MyTest_UnaryCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error) (interface{}, error) {
+func _MyTest_UnaryCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(MyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
-	out, err := srv.(MyTestServer).UnaryCall(ctx, in)
-	if err != nil {
-		return nil, err
+	if interceptor == nil {
+		return srv.(MyTestServer).UnaryCall(ctx, in)
 	}
-	return out, nil
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/gofast.MyTest/UnaryCall",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MyTestServer).UnaryCall(ctx, req.(*MyRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 var _MyTest_serviceDesc = grpc.ServiceDesc{
@@ -485,3 +506,16 @@ var (
 	ErrInvalidLengthGofast = fmt.Errorf("proto: negative length found during unmarshaling")
 	ErrIntOverflowGofast   = fmt.Errorf("proto: integer overflow")
 )
+
+var fileDescriptorGofast = []byte{
+	// 139 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xe2, 0x49, 0xcf, 0x4f, 0x4b,
+	0x2c, 0x2e, 0xd1, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x83, 0xf0, 0x94, 0x14, 0xb9, 0x38,
+	0x7d, 0x2b, 0x83, 0x52, 0x0b, 0x4b, 0x53, 0x8b, 0x4b, 0x84, 0x44, 0xb8, 0x58, 0xc3, 0x12, 0x73,
+	0x4a, 0x53, 0x25, 0x18, 0x15, 0x18, 0x35, 0x98, 0x83, 0x58, 0xcb, 0x40, 0x1c, 0x25, 0x25, 0x2e,
+	0x2e, 0x90, 0x92, 0xe2, 0x82, 0xfc, 0xbc, 0xe2, 0x54, 0xec, 0x6a, 0x8c, 0x6c, 0xb8, 0xd8, 0x7c,
+	0x2b, 0x43, 0x40, 0x66, 0x18, 0x71, 0x71, 0x86, 0xe6, 0x25, 0x16, 0x55, 0x3a, 0x27, 0xe6, 0xe4,
+	0x08, 0x09, 0xea, 0x41, 0x2d, 0x85, 0xdb, 0x21, 0x25, 0x84, 0x2c, 0x04, 0x31, 0xd3, 0x49, 0xe0,
+	0xc4, 0x23, 0x39, 0xc6, 0x0b, 0x40, 0xfc, 0x00, 0x88, 0x67, 0x3c, 0x96, 0x63, 0x00, 0x04, 0x00,
+	0x00, 0xff, 0xff, 0x32, 0xdb, 0xa9, 0xd6, 0xad, 0x00, 0x00, 0x00,
+}
