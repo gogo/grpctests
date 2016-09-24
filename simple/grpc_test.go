@@ -107,11 +107,11 @@ func setup(t testing.TB, mytest MyTestServer) (*grpc.Server, MyTestClient) {
 	if err != nil {
 		t.Fatalf("Failed to parse listener address: %v", err)
 	}
-	s := grpc.NewServer(grpc.MaxConcurrentStreams(1))
+	s := grpc.NewServer(grpc.MaxConcurrentStreams(1), grpc.RPCCompressor(grpc.NewGZIPCompressor()))
 	RegisterMyTestServer(s, mytest)
 	go s.Serve(lis)
 	addr := "localhost:" + port
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+	conn, err := grpc.Dial(addr, grpc.WithInsecure(), grpc.WithDecompressor(grpc.NewGZIPDecompressor()))
 	if err != nil {
 		t.Fatalf("Dial(%q) = %v", addr, err)
 	}
